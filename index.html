@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôm Nay Ăn Gì? - Vòng Quay Món Ăn Roulette</title>
+    <meta name="description" content="Vòng quay ẩm thực chọn món ăn mỗi ngày: Băng chuyền cuộn ngang mượt mà, mở hộp tìm món ngon, xem quán gần nhất trên Google Maps!">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍜</text></svg>">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo-brand">
+                <div class="logo-icon">🍜</div>
+                <div class="logo-text">
+                    <h1>HÔM NAY ĂN GÌ?</h1>
+                    <span class="logo-tagline">Vòng Quay Ẩm Thực • Food Mystery Box</span>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <button class="btn btn-icon-only active" id="sound-toggle-btn" title="Bật/Tắt âm thanh">
+                    <span id="sound-icon">🔊</span>
+                </button>
+                <button class="btn" id="odds-toggle-btn" title="Chuyển đổi tỉ lệ mở hòm">
+                    ⚖️ Tỉ lệ: Tiêu Chuẩn (0.26% Vàng)
+                </button>
+                <button class="btn" id="add-custom-item-btn" title="Thêm món ăn riêng">
+                    ➕ Thêm Món Của Bạn
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+
+        <!-- Case Overview Hero -->
+        <section class="case-hero">
+            <img id="case-banner" src="assets/images/case_banner.jpg" alt="Case Banner" class="case-banner-img">
+            
+            <div class="case-info">
+                <span class="case-badge-tag" id="case-tag">HÔM NAY ĂN GÌ?</span>
+                <h2 class="case-title" id="case-title">Hôm Nay Ăn Gì?</h2>
+                <p class="case-desc" id="case-desc">
+                    Phân vân không biết hôm nay ăn gì? Bấm mở hòm để quay chọn ngay món ngon, từ Mì Tôm Hảo Hảo sinh viên đến Bò Wagyu A5 dát vàng 24K.
+                </p>
+            </div>
+
+            <div class="case-selector-box">
+                <div class="case-selector-field">
+                    <label for="case-select">Chọn Menu / Loại Hòm:</label>
+                    <select id="case-select" class="select-custom">
+                        <option value="street-food-case">🍽️ Hôm Nay Ăn Gì? (Ẩm Thực Đường Phố)</option>
+                        <option value="office-lunch-case">🏢 Trưa Nay Ăn Gì? (Bữa Trưa Văn Phòng)</option>
+                        <option value="pizza-party-case">🍕 Đại Tiệc Pizza Thượng Hạng (Pizza Mania)</option>
+                    </select>
+                </div>
+
+                <!-- Budget Filter Bar -->
+                <div class="budget-filter-box">
+                    <div class="budget-filter-header">
+                        <span class="budget-filter-title">💵 Ngân sách:</span>
+                        <span class="budget-active-tag" id="budget-active-tag">Tất Cả Món</span>
+                    </div>
+                    <div class="budget-chips" id="budget-chips">
+                        <button type="button" class="budget-chip active" data-budget="all">Tất Cả</button>
+                        <button type="button" class="budget-chip" data-budget="under35" title="Món dưới 35.000 đ">🟢 &lt; 35k</button>
+                        <button type="button" class="budget-chip" data-budget="35to70" title="Món từ 35.000 đ đến 70.000 đ">🟡 35k - 70k</button>
+                        <button type="button" class="budget-chip" data-budget="above70" title="Món trên 70.000 đ">🟣 &gt; 70k</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE CS:GO ROULETTE REEL -->
+        <section class="reel-section">
+            <div class="reel-viewport-container">
+                <!-- CS:GO Center Indicator Needle with Top and Bottom Arrows -->
+                <div class="needle-indicator"></div>
+
+                <!-- Horizontal Rolling Viewport -->
+                <div class="reel-viewport" id="reel-viewport">
+                    <div class="reel-track" id="reel-track">
+                        <!-- Cards dynamically injected here by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="reel-actions-bar">
+                <button class="btn btn-csgo-open" id="open-case-btn" title="Phím tắt: Phím Cách (Space)">
+                    <span>QUAY HÔM NAY ĂN GÌ?</span>
+                    <kbd class="kbd-badge">Space</kbd>
+                </button>
+
+                <button class="btn btn-quick" id="quick-open-btn" title="Quay nhanh 2.8s">
+                    ⚡ Mở Nhanh
+                </button>
+
+                <div class="options-strip">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="fast-spin-toggle">
+                        <span>Chế độ quay nhanh</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Contents (Danh Sách Món Có Thể Trúng) -->
+        <section class="case-contents-section">
+            <div class="section-title-wrap">
+                <h3 class="section-title">
+                    <span>📋</span> Menu Hôm Nay Ăn Gì (Bấm Để Xem & Tìm Quán)
+                </h3>
+            </div>
+            <div class="case-contents-grid" id="case-items-list">
+                <!-- Item cards rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Inventory / History (Tủ Lạnh Đồ Ăn Của Bạn) -->
+        <section class="inventory-section">
+            <div class="section-title-wrap">
+                <div class="inventory-header-left">
+                    <h3 class="section-title">
+                        <span>🧊</span> Tủ Lạnh / Lịch Sử Quay (<span id="inventory-count">0</span> món)
+                    </h3>
+                    <div class="inventory-total-bill">
+                        💰 Tổng dự tính: <strong id="inventory-total-price">0 đ</strong>
+                    </div>
+                </div>
+                <div class="inventory-header-actions">
+                    <button class="btn btn-share-bill" id="share-bill-btn" title="Sao chép thực đơn và tổng bill để gửi vào nhóm chat (Zalo, Messenger, Telegram...)">
+                        📋 Rủ Bạn Bè / Copy Bill
+                    </button>
+                    <button class="btn" id="clear-inventory-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                        🗑️ Xóa Lịch Sử
+                    </button>
+                </div>
+            </div>
+            <div class="inventory-grid" id="inventory-list">
+                <!-- Won items rendered here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Inspection Modal (CS:GO Weapon Inspect Screen) -->
+    <div class="modal-overlay" id="inspect-modal">
+        <div class="inspect-card" id="inspect-card">
+            <!-- Dynamic Inspection Content -->
+        </div>
+        <div class="modal-bottom-bar">
+            <button class="btn btn-quick" id="modal-open-again-btn">
+                🎲 Quay Lại Ngay <kbd class="kbd-hint-inline">Space</kbd>
+            </button>
+            <button class="btn" id="modal-close-btn">
+                ✕ Đóng <kbd class="kbd-hint-inline">Esc</kbd>
+            </button>
+        </div>
+    </div>
+
+    <!-- Google Maps Nearby Restaurants Modal -->
+    <div class="modal-overlay" id="maps-modal">
+        <div class="maps-modal-container">
+            <!-- Header -->
+            <div class="maps-header">
+                <div class="maps-title-wrap">
+                    <span class="maps-badge" id="maps-dish-badge">📍 GOOGLE MAPS FOOD FINDER</span>
+                    <h2 class="maps-title" id="maps-title">Quán Ăn Gần Bạn</h2>
+                    <p class="maps-subtitle" id="maps-subtitle">Tìm quán theo tọa độ hiện tại hoặc nhập khu vực của bạn</p>
+                </div>
+                <button class="btn btn-icon-only" id="maps-close-btn" title="Đóng">✕</button>
+            </div>
+
+            <!-- Search & Controls -->
+            <div class="maps-controls">
+                <div class="maps-search-bar">
+                    <span class="maps-search-icon">🔍</span>
+                    <input type="text" id="maps-search-input" class="maps-input" placeholder="Tìm kiếm quán ăn, tên món, hoặc quận/huyện...">
+                    <button class="btn btn-maps-search" id="maps-search-submit-btn">Tìm Quán</button>
+                    <button class="btn btn-locate" id="maps-geo-btn" title="Lấy vị trí GPS hiện tại của bạn">
+                        🎯 Gần Tôi Nhất
+                    </button>
+                </div>
+
+                <!-- Quick Filter Tags -->
+                <div class="maps-tags-row" id="maps-tags-list">
+                    <!-- Dynamic tag chips -->
+                </div>
+            </div>
+
+            <!-- Content Area: Map + Sidebar -->
+            <div class="maps-body">
+                <!-- Embedded Google Map -->
+                <div class="maps-iframe-wrapper">
+                    <iframe id="maps-iframe" 
+                            src="" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="maps-loading-spinner" id="maps-loading">
+                        <div class="spinner-ring"></div>
+                        <span>Đang tải Google Maps...</span>
+                    </div>
+                </div>
+
+                <!-- Sidebar Actions & Curated Chains -->
+                <div class="maps-sidebar">
+                    <div class="sidebar-section">
+                        <h4 class="sidebar-title">⚡ MỞ ỨNG DỤNG NGOÀI</h4>
+                        <div class="sidebar-actions">
+                            <a id="btn-open-gmaps-external" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-app-link btn-gmaps">
+                                <span>🗺️</span> Chỉ Đường (Google Maps)
+                            </a>
+                            <a id="btn-open-shopeefood" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-app-link btn-shopee">
+                                <span>🟠</span> Đặt Trên ShopeeFood
+                            </a>
+                            <a id="btn-open-grabfood" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-app-link btn-grab">
+                                <span>🟢</span> Đặt Trên GrabFood
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h4 class="sidebar-title" id="sidebar-chains-title">⭐ THƯƠNG HIỆU GỢI Ý</h4>
+                        <div class="sidebar-chains-list" id="sidebar-chains-list">
+                            <!-- Dynamic chains -->
+                        </div>
+                    </div>
+
+                    <div class="sidebar-tip">
+                        💡 <strong>Mẹo:</strong> Bấm <em>"🎯 Gần Tôi Nhất"</em> để cho phép trình duyệt định vị quán ăn sát cạnh bạn chỉ cách vài trăm mét!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Dish Modal (Thêm Món Ăn Mới) -->
+    <div class="modal-overlay" id="custom-item-modal">
+        <div class="inspect-card" style="max-width: 480px; padding: 1.75rem;">
+            <h2 class="case-title" style="font-size: 1.4rem; margin-bottom: 1.25rem;">➕ Thêm Món Ăn Vào Hòm</h2>
+            <form id="custom-item-form" style="width: 100%;">
+                <div class="form-group">
+                    <label for="custom-name">Tên món ăn (Ví dụ: Cơm sườn trứng ốp):</label>
+                    <input type="text" id="custom-name" class="form-input" placeholder="Nhập tên món ăn..." required>
+                </div>
+                <div class="form-group">
+                    <label for="custom-weapon">Phân loại món ăn (Ví dụ: Cơm trưa, Món nước, Ăn vặt...):</label>
+                    <input type="text" id="custom-weapon" class="form-input" placeholder="Ví dụ: Cơm trưa, Món nước, Ăn vặt...">
+                </div>
+                <div class="form-group">
+                    <label for="custom-rarity">Phẩm cấp (Độ hiếm):</label>
+                    <select id="custom-rarity" class="form-input">
+                        <option value="mil-spec">🟦 Món Phổ Thông (Xanh lam)</option>
+                        <option value="restricted">🟪 Món Đặc Biệt (Tím)</option>
+                        <option value="classified">💖 Món Thượng Hạng (Hồng)</option>
+                        <option value="covert">🟥 Món Cực Phẩm (Đỏ)</option>
+                        <option value="gold">🟨 ★ Món Huyền Thoại (Vàng Hoàng Gia)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="custom-icon">Biểu tượng món ăn:</label>
+                    <select id="custom-icon" class="form-input">
+                        <option value="rice">🍚 Cơm / Xôi</option>
+                        <option value="noodle">🍜 Phở / Bún / Mì</option>
+                        <option value="bread">🥖 Bánh mì / Burger</option>
+                        <option value="chicken">🍗 Gà rán / Đồ nướng</option>
+                        <option value="pizza">🍕 Pizza / Bánh ngọt</option>
+                        <option value="hotpot">🍲 Lẩu / Canh</option>
+                        <option value="sushi">🍣 Sushi / Hải sản</option>
+                        <option value="boba">🧋 Trà sữa / Nước uống</option>
+                        <option value="egg">🥚 Trứng / Ăn vặt</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="custom-image">Link ảnh món ăn (Tùy chọn URL):</label>
+                    <input type="url" id="custom-image" class="form-input" placeholder="https://example.com/anh-mon-an.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="custom-price">Giá tiền ước tính:</label>
+                    <input type="text" id="custom-price" class="form-input" placeholder="Ví dụ: 35.000 đ">
+                </div>
+                <div class="form-group">
+                    <label for="custom-lore">Lời bình hài hước (Lore):</label>
+                    <input type="text" id="custom-lore" class="form-input" placeholder="Ví dụ: Ăn xong leo rank bất bại...">
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-csgo-open" style="flex: 1; padding: 0.75rem; font-size: 1rem;">
+                        Lưu Món Mới
+                    </button>
+                    <button type="button" class="btn" id="close-custom-modal" style="padding: 0.75rem;">
+                        Hủy
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Screen Sparks & Confetti Container -->
+    <div id="particles-overlay"></div>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
